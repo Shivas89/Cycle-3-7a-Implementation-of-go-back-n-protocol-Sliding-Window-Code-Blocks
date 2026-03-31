@@ -1,10 +1,9 @@
-# 7b) Implemenatation of go-back-n protocol - Selective repeat
-
-📡 Implementation of Go-Back-N Protocol – Selective Repeat
+# 7a) Implementation of go-back-n protocol-Sliding Window
+Implementation of Go-Back-N Protocol – Sliding Window
 
 🎯 Aim
 
-To write and execute a program for the Go-Back-N protocol using the Selective Repeat technique.
+To write and execute a program for the Go-Back-N protocol using the sliding window technique.
 
 🛠️ Equipments Required
 
@@ -14,13 +13,13 @@ To write and execute a program for the Go-Back-N protocol using the Selective Re
 
 📋 Procedure
 1. 	Connect two computers in a Wired/Wireless LAN.
-2. 	Ensure both computers are on the same network and can ping each other.
+2. 	Ensure both machines are on the same network and can ping each other.
 3. 	Open a new C file in Code::Blocks or any C IDE and type the program.
 4. 	Navigate to:
 Project -> Properties -> Project Build Options -> Linker Settings
 Add: netproto and pthread
 5. 	Execute the program on both server and client machines.
-6. 	Enter the following:
+6. 	Enter:
 • 	IP address of the remote machine
 • 	Port address of both local and remote machines
 • 	Error rate
@@ -30,42 +29,46 @@ Add: netproto and pthread
 
 #include <stdio.h>
 
-void main() {
-    
-    int i, j, n;
-    printf("GO BACK N ARQ\n");
-    printf("Enter number of frames: ");
-    scanf("%d", &n);
+#define window_size 4  // Assume 7 frames of data are to be sent using Go-Back-N ARQ
 
-    char frame[n][10];
+void main() {
+
+    int i, window_start = 1, ack;
+    
+    int n;
+
+    printf("SLIDING WINDOW PROTOCOL\n");
+    scanf("%d", &n);
+    printf("GO BACK N ARQ\n");
+    printf("Enter the number of frames: %d\n", n);
+
+    char frame[n + 1][10];
 
     for (i = 1; i <= n; i++) {
         printf("Content for frame %d: ", i);
         scanf("%s", frame[i]);
     }
 
-    printf("Enter frame number with no ACK: ");
-    scanf("%d", &j);
+    while (window_start <= n) {
+        printf("\nSending frames:\n");
+        scanf("%d", &ack);
+        printf("Enter frame number with no ACKs: %d\n", ack);
 
-    for (i = 1; i <= n; i++) {
-        if (i != j)
-            printf("\nSending frame %d\nFRAME ACKNOWLEDGED...\n", i);
+        if (ack == 0) {
+            printf("No ACK received, moving window forward\n");
+            window_start += window_size;
+        } else {
+            printf("No Acknowledgement for frame %d...\n", ack);
+            printf("Resending frames starting from frame %d\n", ack);
+            window_start = ack;
+        }
     }
 
-    if (j <= n) {
-        printf("No Acknowledgement for frame %d...\n", j);
-        printf("Resending... Content from frame %d: %s\n\n", j, frame[j]);
-    }
-
-    printf("\nSending frame %d\nFRAME ACKNOWLEDGED...\n", j);
-    printf("\n\nALL FRAMES RECEIVED SUCCESSFULLY\n\n");
+    printf("\nAll frames sent successfully.\n");
 }
-
 🖥️ Sample Output
-
-<img width="1920" height="1080" alt="212222060192_SR" src="https://github.com/user-attachments/assets/4eb32b68-5baf-4866-b972-659b525c95a2" />
-
+<img width="1920" height="1080" alt="212222060192_SW" src="https://github.com/user-attachments/assets/ae997499-a752-4cba-bbbd-cd90aa30671e" />
 
 ✅ Result
 
-Thus, the Go-Back-N protocol using Selective Repeat was successfully implemented and verified.
+Thus, the Go-Back-N protocol using the sliding window technique was successfully implemented and verified.
